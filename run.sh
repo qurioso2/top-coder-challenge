@@ -99,10 +99,15 @@ else:
     
     elif 2 <= days <= 4:
         # Short trips - relatively stable
-        base = days * 95
-        mile_rate = 0.6 - (days - 2) * 0.05
-        receipt_rate = 0.55 - (days - 2) * 0.05
-        result = base + miles * mile_rate + receipts * receipt_rate
+        if days == 2 and receipts > 1500:
+            # Special handling for 2-day high receipt trips
+            base = 200
+            result = base + miles * 0.4 + receipts * 0.6
+        else:
+            base = days * 95
+            mile_rate = 0.6 - (days - 2) * 0.05
+            receipt_rate = 0.55 - (days - 2) * 0.05
+            result = base + miles * mile_rate + receipts * receipt_rate
     
     elif days == 5:
         # Special 5-day handling (high variance noted)
