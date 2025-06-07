@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 # Black Box Legacy Reimbursement System ULTIMATE MODEL
-# Polynomial Grade 2+ ALL cubic terms (MAE $102.95)
-# BEST performance achieved through scientific regression
+# Polynomial Grade 2+ ALL cubic terms with non-negative constraint
+# Enhanced version addressing negative value issues
 
 d=$1
 m=$2
 r=$3
 
+# Validate inputs
+if [ $(echo "$d < 0" | bc -l) -eq 1 ] || [ $(echo "$m < 0" | bc -l) -eq 1 ] || [ $(echo "$r < 0" | bc -l) -eq 1 ]; then
+    echo "0.00"
+    exit 0
+fi
+
+# Handle zero inputs
+if [ $(echo "$d == 0" | bc -l) -eq 1 ]; then
+    echo "0.00"
+    exit 0
+fi
+
+# Calculate polynomial result
 S=$(bc -l << EOF
 scale=12
 -157.9332743924 + \
@@ -25,4 +38,11 @@ scale=12
 EOF
 )
 
-printf "%.2f\n" "$S"
+# Ensure non-negative result and apply minimum bounds
+if [ $(echo "$S < 0" | bc -l) -eq 1 ]; then
+    # For negative results, use a simple fallback calculation
+    fallback=$(echo "scale=2; $d * 50 + $m * 0.3 + $r * 0.5" | bc -l)
+    printf "%.2f\n" "$fallback"
+else
+    printf "%.2f\n" "$S"
+fi
