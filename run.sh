@@ -50,7 +50,7 @@ if efficiency < 0.1 and receipts > 1000:
     penalty_reason = "low_efficiency"
 
 # Trigger 2: High receipts on short trips (more specific)
-elif days == 1 and receipts > 2000:
+elif days == 1 and receipts > 2500:
     is_penalty = True
     penalty_reason = "short_high_receipt"
 
