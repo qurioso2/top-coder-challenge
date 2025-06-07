@@ -87,6 +87,13 @@ else:
         if miles > 500 and receipts < 500:
             # High efficiency bonus
             result = 100 + miles * 0.9 + receipts * 0.4
+        elif receipts > 2000:
+            # Very high receipt handling for single day
+            base = 100 + miles * 0.3
+            receipt_factor = 0.6 - (receipts - 2000) * 0.0001
+            if receipt_factor < 0.2:
+                receipt_factor = 0.2
+            result = base + receipts * receipt_factor
         elif receipts > 1500:
             # High receipt cap with special ratio
             ratio = 0.9 - (receipts - 1500) * 0.0002
